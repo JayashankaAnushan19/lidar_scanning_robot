@@ -4,9 +4,74 @@
   <!-- Robot Params -->
   <xacro:property name="body_length" value="0.4"/>
   <xacro:property name="body_width" value="0.3"/>
-  <xacro:property name="body_height" value="0.1"/>
-  <xacro:property name="wheel_radius" value="0.05"/>
+  <xacro:property name="body_height" value="0.1"/> 
+  <xacro:property name="wheel_radius" value="0.08"/>
   <xacro:property name="wheel_width" value="0.02"/>
+  <xacro:property name="wheel_length_gap" value="0.05"/>
+
+  <!-- Wheels -->
+  <xacro:macro name="wheel" params="prefix x y wheel_rotate">
+    <link name="${prefix}_wheel">
+      <visual>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry>
+          <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
+        </geometry>
+      </collision>
+      <inertial>
+        <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+        <mass value="0.5"/>
+        <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+      </inertial>
+    </link>
+    
+    <joint name="${prefix}_wheel_joint" type="revolute">
+      <parent link="base_link"/>
+      <child link="${prefix}_wheel"/>
+      <origin xyz="${x} ${y} 0" rpy="${wheel_rotate} 0 0"/>
+      <limit effort="10" velocity="5" lower="-3.14" upper="3.14"/>
+      <axis xyz="0 0 1"/>
+      <dynamics damping="0.1" friction="0.1"/>
+      <safety_controller soft_lower_limit="-1.0" soft_upper_limit="1.0" k_position="100" k_velocity="10"/>
+      <calibration>
+        <rising>0.0</rising>
+        <falling>0.0</falling>
+      </calibration>  
+    </joint>
+  </xacro:macro>
+
+
+  <!-- Materials -->
+  <material name="blue">
+    <color rgba="0 0 1 1"/>
+  </material> 
+  <material name="black">
+    <color rgba="0 0 0 1"/>
+  </material>   
+  <material name="white">
+    <color rgba="1 1 1 1"/>
+  </material>
+  <material name="red">
+    <color rgba="1 0 0 1"/>
+  </material>   
+  <material name="green">
+    <color rgba="0 1 0 1"/>
+  </material>
+  <material name="yellow">
+    <color rgba="1 1 0 1"/> 
+  </material>
+  <material name="neon_pink">
+    <color rgba="1.0 0.2 0.6 1"/>
+  </material>
+
+
+  <!-- World link -->
+  <link name="world"/>
 
   <!-- Base Link -->
   <link name="base_link">
@@ -27,8 +92,140 @@
     </inertial>
   </link>
 
+  <!-- World to base joint -->
+  <joint name="base_to_world" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${body_height + wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Wheels -->
+  <xacro:wheel prefix="left_front" x="${body_length/2 - wheel_length_gap}" y="${body_width/2 + wheel_width/2}" wheel_rotate="1.57"/>
+  <xacro:wheel prefix="left_rear" x="-${body_length/2 - wheel_length_gap}" y="${body_width/2 + wheel_width/2}" wheel_rotate="1.57"/>
+  <xacro:wheel prefix="right_front" x="${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/>
+  <xacro:wheel prefix="right_rear" x="-${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/> 
+
+
+
+
+<!-- Plugin to load ros_control -->
+<gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" />
+</gazebo>
+
+<!-- Plugin to simulate differential drive -->
+<gazebo>
+  <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+    <ros>
+      <namespace>/</namespace>
+      <remapping>cmd_vel:=/cmd_vel</remapping>
+    </ros>
+    <left_joint>left_front_wheel_joint</left_joint>
+    <left_joint>left_rear_wheel_joint</left_joint>
+    <right_joint>right_front_wheel_joint</right_joint>
+    <right_joint>right_rear_wheel_joint</right_joint>
+    <wheel_separation>0.34</wheel_separation>
+    <wheel_diameter>0.16</wheel_diameter>
+    <broadcast_tf>true</broadcast_tf>
+    <publish_odom>true</publish_odom>
+    <robot_base_frame>base_link</robot_base_frame>
+  </plugin>
+</gazebo>
+
+<!-- left_front_wheel -->
+<transmission name="left_front_wheel_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="left_front_wheel_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="left_front_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<gazebo reference="left_front_wheel">
+  <mu1>0.8</mu1>
+  <mu2>0.8</mu2>
+  <material>Gazebo/Black</material>
+</gazebo>
+
+<gazebo reference="left_front_wheel_joint">
+  <provideFeedback>true</provideFeedback>
+</gazebo>
+
+
+<!-- left_rear_wheel -->
+<transmission name="left_rear_wheel_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="left_rear_wheel_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="left_rear_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<gazebo reference="left_rear_wheel">
+  <mu1>0.8</mu1>
+  <mu2>0.8</mu2>
+  <material>Gazebo/Black</material>
+</gazebo>
+
+<gazebo reference="left_rear_wheel_joint">
+  <provideFeedback>true</provideFeedback>
+</gazebo>
+
+
+<!-- right_front_wheel -->
+<transmission name="right_front_wheel_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="right_front_wheel_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="right_front_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<gazebo reference="right_front_wheel">
+  <mu1>0.8</mu1>
+  <mu2>0.8</mu2>
+  <material>Gazebo/Black</material>
+</gazebo>
+
+<gazebo reference="right_front_wheel_joint">
+  <provideFeedback>true</provideFeedback>
+</gazebo>
+
+
+<!-- right_rear_wheel -->
+<transmission name="right_rear_wheel_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="right_rear_wheel_joint">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="right_rear_motor">
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<gazebo reference="right_rear_wheel">
+  <mu1>0.8</mu1>
+  <mu2>0.8</mu2>
+  <material>Gazebo/Black</material>
+</gazebo>
+
+<gazebo reference="right_rear_wheel_joint">
+  <provideFeedback>true</provideFeedback>
+</gazebo>
+
+
+
+
+
+
   <!-- LiDAR Sensor (Hokuyo style) -->
-  <link name="laser">
+  <!-- <link name="laser">
     <visual>
       <geometry>
         <cylinder radius="0.03" length="0.05"/>
@@ -42,6 +239,8 @@
     <parent link="base_link"/>
     <child link="laser"/>
     <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
-  </joint>
+  </joint> -->
+
+
 
 </robot>

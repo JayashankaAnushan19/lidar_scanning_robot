@@ -1,5 +1,28 @@
 <launch>
-  <param name="robot_description" command="$(find xacro)/xacro '$(find lidar_bot)/urdf/lidar_bot.xacro'" />
+
+  <!-- Launch Gazebo -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+  <!-- Load xacro to robot_description param -->
+  <param name="robot_description" command="$(find xacro)/xacro '$(find lidar_scanning_robot)/urdf/lidar_bot.xacro'" />
+
+  <!-- Spawn the robot into Gazebo using robot_description -->
+  <node name="spawn_lidar_bot" pkg="gazebo_ros" type="spawn_model"
+        args="-param robot_description -urdf -model lidar_bot -x 0 -y 0 -z 0.0"
+        output="screen"/>
+
+  <!-- Joint State & Robot State Publishers -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find lidar_bot)/rviz/robot.rviz" required="true" />
+
+  <!-- Launch RViz -->
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find lidar_scanning_robot)/rviz/robot.rviz" required="true" /> -->
+  
+  <!-- Load controller config -->
+  <rosparam ns="robot_wheel_controller" file="$(find lidar_scanning_robot)/config/joint_controller.yaml" command="load"/>
+
+  <!-- Spawn controller -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner"
+        output="screen" args="robot_wheel_controller" />
+
 </launch>
