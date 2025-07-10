@@ -1,44 +1,33 @@
+robot_wheel_controller:
+  type: "diff_drive_controller/DiffDriveController"
+  left_wheel: ["left_front_wheel_joint", "left_rear_wheel_joint"]
+  right_wheel: ["right_front_wheel_joint", "right_rear_wheel_joint"]
+  wheel_separation: 0.34
+  wheel_radius: 0.075
+  publish_rate: 50
+  base_frame_id: base_link
+  odom_frame_id: odom
+  enable_odom_tf: true
+  allow_multiple_cmd_vel_publishers: true
+  cmd_vel_timeout: 0.25
+
+
+# PID gains for each joint
 gazebo_ros_control:
   pid_gains:
     left_front_wheel_joint:
-      p: 10.0
+      p: 1.0
       i: 0.0
-      d: 0.1
+      d: 0.0
     left_rear_wheel_joint:
-      p: 10.0
+      p: 1.0
       i: 0.0
-      d: 0.1
+      d: 0.0
     right_front_wheel_joint:
-      p: 10.0
+      p: 1.0
       i: 0.0
-      d: 0.1
+      d: 0.0
     right_rear_wheel_joint:
-      p: 10.0
+      p: 1.0
       i: 0.0
-      d: 0.1
-
-robot_wheel_controller:
-  type: "diff_drive_controller/DiffDriveController"
-  left_wheel: ['left_front_wheel_joint', 'left_rear_wheel_joint'] 
-  right_wheel: ['right_front_wheel_joint', 'right_rear_wheel_joint']
-  publish_rate: 50
-  cmd_vel_timeout: 0.25
-  wheel_separation: 0.34
-  wheel_radius: 0.08
-  enable_odom_tf: false
-  estimate_velocity_from_position: false
-
-  linear:
-    x:
-      has_velocity_limits: true
-      max_velocity: 1.0
-      has_acceleration_limits: true
-      max_acceleration: 3.0
-
-  angular:
-    z:
-      has_velocity_limits: true
-      max_velocity: 2.0
-      has_acceleration_limits: true
-      max_acceleration: 6.0
-  
+      d: 0.0

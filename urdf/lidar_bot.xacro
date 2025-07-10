@@ -105,16 +105,13 @@
   <xacro:wheel prefix="right_front" x="${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/>
   <xacro:wheel prefix="right_rear" x="-${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/> 
 
-
-
-
 <!-- Plugin to load ros_control -->
 <gazebo>
   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" />
 </gazebo>
 
 <!-- Plugin to simulate differential drive -->
-<gazebo>
+<!-- <gazebo>
   <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
     <ros>
       <namespace>/</namespace>
@@ -130,13 +127,13 @@
     <publish_odom>true</publish_odom>
     <robot_base_frame>base_link</robot_base_frame>
   </plugin>
-</gazebo>
+</gazebo> -->
 
 <!-- left_front_wheel -->
 <transmission name="left_front_wheel_trans">
   <type>transmission_interface/SimpleTransmission</type>
   <joint name="left_front_wheel_joint">
-    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
   </joint>
   <actuator name="left_front_motor">
     <mechanicalReduction>1</mechanicalReduction>
@@ -158,7 +155,7 @@
 <transmission name="left_rear_wheel_trans">
   <type>transmission_interface/SimpleTransmission</type>
   <joint name="left_rear_wheel_joint">
-    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
   </joint>
   <actuator name="left_rear_motor">
     <mechanicalReduction>1</mechanicalReduction>
@@ -180,7 +177,7 @@
 <transmission name="right_front_wheel_trans">
   <type>transmission_interface/SimpleTransmission</type>
   <joint name="right_front_wheel_joint">
-    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
   </joint>
   <actuator name="right_front_motor">
     <mechanicalReduction>1</mechanicalReduction>
@@ -202,7 +199,7 @@
 <transmission name="right_rear_wheel_trans">
   <type>transmission_interface/SimpleTransmission</type>
   <joint name="right_rear_wheel_joint">
-    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    <hardwareInterface>VelocityJointInterface</hardwareInterface>
   </joint>
   <actuator name="right_rear_motor">
     <mechanicalReduction>1</mechanicalReduction>

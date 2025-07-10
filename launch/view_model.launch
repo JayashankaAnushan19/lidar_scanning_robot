@@ -17,9 +17,11 @@
 
   <!-- Launch RViz -->
   <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find lidar_scanning_robot)/rviz/robot.rviz" required="true" /> -->
-  
+
   <!-- Load controller config -->
-  <rosparam ns="robot_wheel_controller" file="$(find lidar_scanning_robot)/config/joint_controller.yaml" command="load"/>
+  <!-- <rosparam ns="robot_wheel_controller" file="$(find lidar_scanning_robot)/config/joint_controller.yaml" command="load"/> -->
+  <rosparam file="$(find lidar_scanning_robot)/config/joint_controller.yaml" command="load"/>
+
 
   <!-- Spawn controller -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner"
