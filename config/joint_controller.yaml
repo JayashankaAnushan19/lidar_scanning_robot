@@ -3,7 +3,7 @@ robot_wheel_controller:
   left_wheel: ["left_front_wheel_joint", "left_rear_wheel_joint"]
   right_wheel: ["right_front_wheel_joint", "right_rear_wheel_joint"]
   wheel_separation: 0.34
-  wheel_radius: 0.075
+  wheel_radius: 0.08
   publish_rate: 50
   base_frame_id: base_link
   odom_frame_id: odom

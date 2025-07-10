@@ -105,11 +105,6 @@
   <xacro:wheel prefix="right_front" x="${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/>
   <xacro:wheel prefix="right_rear" x="-${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/> 
 
-<!-- Plugin to load ros_control -->
-<gazebo>
-  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so" />
-</gazebo>
-
 <!-- Plugin to simulate differential drive -->
 <!-- <gazebo>
   <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
@@ -129,92 +124,75 @@
   </plugin>
 </gazebo> -->
 
-<!-- left_front_wheel -->
-<transmission name="left_front_wheel_trans">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="left_front_wheel_joint">
-    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-  </joint>
-  <actuator name="left_front_motor">
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
-
-<gazebo reference="left_front_wheel">
-  <mu1>0.8</mu1>
-  <mu2>0.8</mu2>
-  <material>Gazebo/Black</material>
-</gazebo>
-
-<gazebo reference="left_front_wheel_joint">
-  <provideFeedback>true</provideFeedback>
-</gazebo>
+  <!-- left_front_wheel -->
+  <transmission name="left_front_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_front_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_front_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <gazebo reference="left_front_wheel_joint">
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+  </gazebo>
 
 
-<!-- left_rear_wheel -->
-<transmission name="left_rear_wheel_trans">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="left_rear_wheel_joint">
-    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-  </joint>
-  <actuator name="left_rear_motor">
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
 
-<gazebo reference="left_rear_wheel">
-  <mu1>0.8</mu1>
-  <mu2>0.8</mu2>
-  <material>Gazebo/Black</material>
-</gazebo>
-
-<gazebo reference="left_rear_wheel_joint">
-  <provideFeedback>true</provideFeedback>
-</gazebo>
+  <!-- left_rear_wheel -->
+  <transmission name="left_rear_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="left_rear_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_rear_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <gazebo reference="left_rear_wheel_joint">
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+  </gazebo>
 
 
-<!-- right_front_wheel -->
-<transmission name="right_front_wheel_trans">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="right_front_wheel_joint">
-    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-  </joint>
-  <actuator name="right_front_motor">
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
-
-<gazebo reference="right_front_wheel">
-  <mu1>0.8</mu1>
-  <mu2>0.8</mu2>
-  <material>Gazebo/Black</material>
-</gazebo>
-
-<gazebo reference="right_front_wheel_joint">
-  <provideFeedback>true</provideFeedback>
-</gazebo>
+  <!-- right_front_wheel -->
+  <transmission name="right_front_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_front_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_front_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <gazebo reference="right_front_wheel_joint">
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+  </gazebo>
 
 
-<!-- right_rear_wheel -->
-<transmission name="right_rear_wheel_trans">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="right_rear_wheel_joint">
-    <hardwareInterface>VelocityJointInterface</hardwareInterface>
-  </joint>
-  <actuator name="right_rear_motor">
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
+  <!-- right_rear_wheel -->
+  <transmission name="right_rear_wheel_trans">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="right_rear_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_rear_motor">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </actuator>
+  </transmission>
+  <gazebo reference="right_rear_wheel_joint">
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
+  </gazebo>
 
-<gazebo reference="right_rear_wheel">
-  <mu1>0.8</mu1>
-  <mu2>0.8</mu2>
-  <material>Gazebo/Black</material>
-</gazebo>
+  <!-- <gazebo reference="right_rear_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
 
-<gazebo reference="right_rear_wheel_joint">
-  <provideFeedback>true</provideFeedback>
-</gazebo>
+  <gazebo reference="right_rear_wheel_joint">
+    <provideFeedback>true</provideFeedback>
+  </gazebo> -->
 
 
 
@@ -238,6 +216,11 @@
     <origin xyz="0 0 ${body_height/2}" rpy="0 0 0"/>
   </joint> -->
 
-
+  <!-- Plugin to load ros_control -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
 
 </robot>
