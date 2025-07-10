@@ -2,7 +2,7 @@ robot_wheel_controller:
   type: "diff_drive_controller/DiffDriveController"
   left_wheel: ["left_front_wheel_joint", "left_rear_wheel_joint"]
   right_wheel: ["right_front_wheel_joint", "right_rear_wheel_joint"]
-  wheel_separation: 0.34
+  wheel_separation: 0.32
   wheel_radius: 0.08
   publish_rate: 50
   base_frame_id: base_link
@@ -10,7 +10,7 @@ robot_wheel_controller:
   enable_odom_tf: true
   allow_multiple_cmd_vel_publishers: true
   cmd_vel_timeout: 0.25
-
+  cmd_vel_topic: /cmd_vel
 
 # PID gains for each joint
 gazebo_ros_control:

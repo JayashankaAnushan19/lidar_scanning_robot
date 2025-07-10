@@ -134,9 +134,6 @@
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </actuator>
   </transmission>
-  <gazebo reference="left_front_wheel_joint">
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
-  </gazebo>
 
 
 
@@ -150,9 +147,6 @@
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </actuator>
   </transmission>
-  <gazebo reference="left_rear_wheel_joint">
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
-  </gazebo>
 
 
   <!-- right_front_wheel -->
@@ -165,9 +159,6 @@
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </actuator>
   </transmission>
-  <gazebo reference="right_front_wheel_joint">
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
-  </gazebo>
 
 
   <!-- right_rear_wheel -->
@@ -180,9 +171,6 @@
       <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </actuator>
   </transmission>
-  <gazebo reference="right_rear_wheel_joint">
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so"/>
-  </gazebo>
 
   <!-- <gazebo reference="right_rear_wheel">
     <mu1>0.8</mu1>
@@ -221,6 +209,25 @@
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/</robotNamespace>
     </plugin>
+    <!-- Plugin to simulate differential drive -->
+
+    <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>cmd_vel:=cmd_vel</remapping>       
+      </ros>
+      <left_joint>left_front_wheel_joint</left_joint>
+      <left_joint>left_rear_wheel_joint</left_joint>
+      <right_joint>right_front_wheel_joint</right_joint>
+      <right_joint>right_rear_wheel_joint</right_joint>
+      <wheel_separation>${body_width + wheel_width}</wheel_separation> <!-- 0.3 + 0.02 = 0.32 -->
+      <wheel_diameter>${2 * wheel_radius}</wheel_diameter> <!-- 2 * 0.08 = 0.16 -->
+      <broadcast_tf>true</broadcast_tf>
+      <publish_odom>true</publish_odom>
+      <robot_base_frame>base_link</robot_base_frame>
+      <odom_frame_id>odom</odom_frame_id>
+    </plugin>
+
   </gazebo>
 
 </robot>

@@ -11,20 +11,28 @@
         args="-param robot_description -urdf -model lidar_bot -x 0 -y 0 -z 0.0"
         output="screen"/>
 
-  <!-- Joint State & Robot State Publishers -->
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
-
   <!-- Launch RViz -->
   <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find lidar_scanning_robot)/rviz/robot.rviz" required="true" /> -->
 
-  <!-- Load controller config -->
-  <!-- <rosparam ns="robot_wheel_controller" file="$(find lidar_scanning_robot)/config/joint_controller.yaml" command="load"/> -->
-  <rosparam file="$(find lidar_scanning_robot)/config/joint_controller.yaml" command="load"/>
 
+  <!-- Load and launch the Joint Controller -->
+  <rosparam file="$(find lidar_scanning_robot)/config/joint_controller.yaml" command="load"/>   
+  
+  <!-- Load the controller manager -->
+  <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="robot_wheel_controller" /> -->
 
-  <!-- Spawn controller -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-        output="screen" args="robot_wheel_controller" />
+  <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/lidar_bot" args="robot_wheel_controller"/> -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+      output="screen" ns="/lidar_bot" args="robot_wheel_controller">
+    <remap from="/cmd_vel" to="/cmd_vel"/>
+  </node>
+  
+
+  <!-- Joint State & Robot State Publishers -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/lidar_bot_joint_states" />
+  </node>
 
 </launch>
