@@ -255,15 +255,14 @@
     <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <updateRate>100.0</updateRate>
       <robotNamespace>/</robotNamespace>
-      <left_wheel>left_front_wheel</left_wheel>
-      <left_wheel>left_rear_wheel</left_wheel>
-      <right_wheel>right_front_wheel</right_wheel>
-      <right_wheel>right_rear_wheel</right_wheel>
+      <!-- <left_wheel>left_front_wheel</left_wheel> -->
+      <!-- <left_wheel>left_rear_wheel</left_wheel> -->
+      <!-- <right_wheel>right_front_wheel</right_wheel> -->
+      <!-- <right_wheel>right_rear_wheel</right_wheel> -->
       <leftJoint>left_front_wheel_joint</leftJoint>
       <leftJoint>left_rear_wheel_joint</leftJoint>
       <rightJoint>right_front_wheel_joint</rightJoint>
       <rightJoint>right_rear_wheel_joint</rightJoint>
-      <odometrySource>1</odometrySource>
       <wheelSeparation>0.32</wheelSeparation>
       <wheelDiameter>0.16</wheelDiameter>
       <robotBaseFrame>base_link</robotBaseFrame>

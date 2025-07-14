@@ -1,7 +1,9 @@
 <launch>
 
   <!-- Launch Gazebo -->
-  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+  <include file="$(find gazebo_ros)/launch/empty_world.launch"> 
+    <!-- <arg name="world_name" value="worlds/willowgarage.world"/> -->
+  </include>
 
   <!-- Load xacro to robot_description param -->
   <param name="robot_description" command="$(find xacro)/xacro '$(find lidar_scanning_robot)/urdf/lidar_bot.xacro'" />
