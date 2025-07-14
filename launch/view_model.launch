@@ -6,7 +6,7 @@
   </include>
 
   <!-- Load xacro to robot_description param -->
-  <param name="robot_description" command="$(find xacro)/xacro '$(find lidar_scanning_robot)/urdf/lidar_bot.xacro'" />
+  <param name="robot_description" command="$(find xacro)/xacro '$(find lidar_scanning_robot)/urdf/lidar_bot.xacro'" /> 
 
   <!-- Spawn the robot into Gazebo using robot_description -->
   <node name="spawn_lidar_bot" pkg="gazebo_ros" type="spawn_model"
@@ -24,7 +24,7 @@
   <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="robot_wheel_controller" /> -->
 
   <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/lidar_bot" args="robot_wheel_controller"/> -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="robot_wheel_controller"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="robot_wheel_controller joint_state_controller"/>
 
 
   <!-- Joint State & Robot State Publishers -->

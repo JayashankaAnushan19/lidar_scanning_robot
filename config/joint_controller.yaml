@@ -4,7 +4,7 @@ robot_wheel_controller:
   right_wheel: ['right_front_wheel_joint', 'right_rear_wheel_joint']
   wheel_separation: 0.32
   wheel_radius: 0.08
-  publish_rate: 50
+  publish_rate: 50 
   base_frame_id: base_link
   odom_frame_id: odom
   enable_odom_tf: true
