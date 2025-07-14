@@ -18,6 +18,13 @@
         </geometry>
         <material name="black"/>
       </visual>
+      <visual name="${prefix}_wheel_dot">
+        <origin xyz="${wheel_radius} 0 0" rpy="0 0 0"/>
+        <geometry>
+          <sphere radius="0.01"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
       <collision>
         <geometry>
           <cylinder radius="${wheel_radius}" length="${wheel_width}"/>
@@ -30,7 +37,7 @@
       </inertial>
     </link>
     
-    <joint name="${prefix}_wheel_joint" type="revolute">
+    <joint name="${prefix}_wheel_joint" type="continuous">
       <parent link="base_link"/>
       <child link="${prefix}_wheel"/>
       <origin xyz="${x} ${y} 0" rpy="${wheel_rotate} 0 0"/>
@@ -43,6 +50,16 @@
         <falling>0.0</falling>
       </calibration>  
     </joint>
+
+    <gazebo reference="${prefix}_wheel">
+      <visual name="${prefix}_wheel_dot">
+        <origin xyz="${wheel_radius} 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.05" length="0.05"/>
+        </geometry>
+        <material>Gazebo/Red</material>
+      </visual>
+    </gazebo>
   </xacro:macro>
 
 
@@ -102,8 +119,34 @@
   <!-- Wheels -->
   <xacro:wheel prefix="left_front" x="${body_length/2 - wheel_length_gap}" y="${body_width/2 + wheel_width/2}" wheel_rotate="1.57"/>
   <xacro:wheel prefix="left_rear" x="-${body_length/2 - wheel_length_gap}" y="${body_width/2 + wheel_width/2}" wheel_rotate="1.57"/>
-  <xacro:wheel prefix="right_front" x="${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/>
-  <xacro:wheel prefix="right_rear" x="-${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="-1.57"/> 
+  <xacro:wheel prefix="right_front" x="${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="1.57"/>
+  <xacro:wheel prefix="right_rear" x="-${body_length/2 - wheel_length_gap}" y="-${body_width/2 + wheel_width/2}" wheel_rotate="1.57"/> 
+
+  <gazebo reference="base_link">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  <gazebo reference="left_front_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="left_rear_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="right_front_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
+  <gazebo reference="right_rear_wheel">
+    <mu1>0.8</mu1>
+    <mu2>0.8</mu2>
+    <material>Gazebo/Black</material>
+  </gazebo>
 
 <!-- Plugin to simulate differential drive -->
 <!-- <gazebo>
@@ -209,25 +252,38 @@
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/</robotNamespace>
     </plugin>
-    <!-- Plugin to simulate differential drive -->
-
     <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
-      <ros>
-        <namespace>/</namespace>
-        <remapping>cmd_vel:=cmd_vel</remapping>       
-      </ros>
-      <left_joint>left_front_wheel_joint</left_joint>
-      <left_joint>left_rear_wheel_joint</left_joint>
-      <right_joint>right_front_wheel_joint</right_joint>
-      <right_joint>right_rear_wheel_joint</right_joint>
-      <wheel_separation>${body_width + wheel_width}</wheel_separation> <!-- 0.3 + 0.02 = 0.32 -->
-      <wheel_diameter>${2 * wheel_radius}</wheel_diameter> <!-- 2 * 0.08 = 0.16 -->
-      <broadcast_tf>true</broadcast_tf>
-      <publish_odom>true</publish_odom>
-      <robot_base_frame>base_link</robot_base_frame>
-      <odom_frame_id>odom</odom_frame_id>
+      <updateRate>100.0</updateRate>
+      <robotNamespace>/</robotNamespace>
+      <left_wheel>left_front_wheel</left_wheel>
+      <left_wheel>left_rear_wheel</left_wheel>
+      <right_wheel>right_front_wheel</right_wheel>
+      <right_wheel>right_rear_wheel</right_wheel>
+      <leftJoint>left_front_wheel_joint</leftJoint>
+      <leftJoint>left_rear_wheel_joint</leftJoint>
+      <rightJoint>right_front_wheel_joint</rightJoint>
+      <rightJoint>right_rear_wheel_joint</rightJoint>
+      <odometrySource>1</odometrySource>
+      <wheelSeparation>0.32</wheelSeparation>
+      <wheelDiameter>0.16</wheelDiameter>
+      <robotBaseFrame>base_link</robotBaseFrame>
+      <rosDebugLevel>1</rosDebugLevel>
+      <publishWheelTF>true</publishWheelTF>
+      <publishOdomTF>true</publishOdomTF>
+      <publishWheelJointState>true</publishWheelJointState>
+      <wheelAcceleration>0.5</wheelAcceleration>
+      <wheelTorque>5</wheelTorque>
+      <odometrySource>1</odometrySource>
+      <publishTf>1</publishTf>
+      <torque>50</torque>
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <broadcastTF>true</broadcastTF>
+      <covariance_x>0.0001</covariance_x>
+      <covariance_y>0.0001</covariance_y>
+      <covariance_yaw>0.0001</covariance_yaw>
     </plugin>
-
   </gazebo>
 
 </robot>
