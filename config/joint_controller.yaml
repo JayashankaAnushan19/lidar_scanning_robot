@@ -1,18 +1,30 @@
+
 robot_wheel_controller:
   type: "diff_drive_controller/DiffDriveController"
   left_wheel: ['left_front_wheel_joint', 'left_rear_wheel_joint']
   right_wheel: ['right_front_wheel_joint', 'right_rear_wheel_joint']
-  wheel_separation: 0.32
-  wheel_radius: 0.08
-  publish_rate: 50 
-  base_frame_id: base_link
-  odom_frame_id: odom
-  enable_odom_tf: true
-  allow_multiple_cmd_vel_publishers: true
+
+  publish_rate: 50
+  pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]
+  twist_covariance_diagonal: [0.001, 0.001, 0.001, 1000000.0, 1000000.0, 0.03]
   cmd_vel_timeout: 0.25
-  velocity_rolling_window_size: 2
-  pose_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
-  twist_covariance_diagonal: [0.001, 0.001, 0.001, 0.001, 0.001, 0.03]
+
+  enable_odom_tf: false
+  wheel_separation_multiplier: 1.5 # default: 1.0
+  wheel_radius_multiplier    : 1.0 # default: 1.0
+
+  linear:
+    x:
+      has_velocity_limits    : true
+      max_velocity           : 2.0   # m/s
+      has_acceleration_limits: true
+      max_acceleration       : 20.0   # m/s^2
+  angular:
+    z:
+      has_velocity_limits    : true
+      max_velocity           : 4.0   # rad/s
+      has_acceleration_limits: true
+      max_acceleration       : 25.0   # rad/s^2
 
 joint_state_controller:
   type: "joint_state_controller/JointStateController"
@@ -21,18 +33,18 @@ joint_state_controller:
 gazebo_ros_control:
   pid_gains:
     left_front_wheel_joint:
-      p: 1.0
-      i: 0.0
+      p: 5.0
+      i: 1.0
       d: 0.0
     left_rear_wheel_joint:
-      p: 1.0
-      i: 0.0
+      p: 5.0
+      i: 1.0
       d: 0.0
     right_front_wheel_joint:
-      p: 1.0
-      i: 0.0
+      p: 5.0
+      i: 1.0
       d: 0.0
     right_rear_wheel_joint:
-      p: 1.0
-      i: 0.0
+      p: 5.0
+      i: 1.0
       d: 0.0
