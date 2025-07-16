@@ -41,7 +41,7 @@ def main():
     print("Press '+' to increase speed, '-' to decrease speed.")
     print("")
     print("")
-
+ 
     # Shutdown hook to clean up
     def shutdown_hook():
         move_cmd.linear.x = 0

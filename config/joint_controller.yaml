@@ -1,6 +1,8 @@
 
 robot_wheel_controller:
   type: "diff_drive_controller/DiffDriveController"
+  # left_wheel: 'left_front_wheel_joint'
+  # right_wheel: 'right_front_wheel_joint'
   left_wheel: ['left_front_wheel_joint', 'left_rear_wheel_joint']
   right_wheel: ['right_front_wheel_joint', 'right_rear_wheel_joint']
 
@@ -10,7 +12,7 @@ robot_wheel_controller:
   cmd_vel_timeout: 0.25
 
   enable_odom_tf: false
-  wheel_separation_multiplier: 1.5 # default: 1.0
+  wheel_separation_multiplier: 1.0 # default: 1.0
   wheel_radius_multiplier    : 1.0 # default: 1.0
 
   linear:
