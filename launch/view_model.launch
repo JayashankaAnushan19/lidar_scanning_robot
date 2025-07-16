@@ -24,8 +24,7 @@
   <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="robot_wheel_controller" /> -->
 
   <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/lidar_bot" args="robot_wheel_controller"/> -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="robot_wheel_controller joint_state_controller"/>
-
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="robot_wheel_controller left_rear_velocity_controller right_rear_velocity_controller joint_state_controller"/>
 
   <!-- Joint State & Robot State Publishers -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen" />

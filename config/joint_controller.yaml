@@ -1,10 +1,10 @@
 
 robot_wheel_controller:
   type: "diff_drive_controller/DiffDriveController"
-  # left_wheel: 'left_front_wheel_joint'
-  # right_wheel: 'right_front_wheel_joint'
-  left_wheel: ['left_front_wheel_joint', 'left_rear_wheel_joint']
-  right_wheel: ['right_front_wheel_joint', 'right_rear_wheel_joint']
+  left_wheel: 'left_front_wheel_joint'
+  right_wheel: 'right_front_wheel_joint'
+  # left_wheel: ['left_front_wheel_joint', 'left_rear_wheel_joint']
+  # right_wheel: ['right_front_wheel_joint', 'right_rear_wheel_joint']
 
   publish_rate: 50
   pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]
@@ -27,6 +27,22 @@ robot_wheel_controller:
       max_velocity           : 4.0   # rad/s
       has_acceleration_limits: true
       max_acceleration       : 25.0   # rad/s^2
+
+left_rear_velocity_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: left_rear_wheel_joint
+  pid:
+    p: 5.0
+    i: 1.0
+    d: 0.0
+
+right_rear_velocity_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: right_rear_wheel_joint
+  pid:
+    p: 5.0
+    i: 1.0
+    d: 0.0
 
 joint_state_controller:
   type: "joint_state_controller/JointStateController"
