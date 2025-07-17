@@ -1,0 +1,24 @@
+<launch>
+  <!-- Argument for GUI toggle -->
+  <arg name="gui" default="true"/>
+
+  <!-- Include the Gazebo empty world launch file with the specified assessment world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- Load the robot description parameter -->
+  <param name="robot_description" command="$(find xacro)/xacro $(find lidar_scanning_robot)/urdf/lidar_scanning_robot.xacro"/>
+
+  <!-- Node to publish robot state -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0"/>
+  </node>
+
+  <!-- Node to spawn the robot model in Gazebo -->
+  <node name="spawn_robot" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model lidar_scanning_robot -x -2 -y 0.5 -z 0" />
+</launch>

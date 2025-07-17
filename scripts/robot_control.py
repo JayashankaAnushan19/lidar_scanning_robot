@@ -26,7 +26,7 @@ def getKey():
 
 def main():
     rospy.init_node('my_teleop_cmds')
-    pub = rospy.Publisher('/robot_wheel_controller/cmd_vel', Twist, queue_size=10)
+    pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
     
     # Define initial speed and turn speed
     speed = 1.0
@@ -34,7 +34,7 @@ def main():
     move_cmd = Twist()
 
     print("")
-    print("--- Control Your Turtle! ---")
+    print("--- Control Your Bot! ---")
     print("Use 'WASD' or Arrow keys to move the bot")
     print("Press 'Q' or 'P' to quit to main menu.")
     print("Press 'R' to reset speed.")
