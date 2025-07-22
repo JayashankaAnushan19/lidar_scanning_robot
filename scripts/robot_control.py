@@ -30,7 +30,7 @@ def main():
     
     # Define initial speed and turn speed
     speed = 1.0
-    max_speed = 3.0
+    max_speed = 6.0
     move_cmd = Twist()
 
     print("")
@@ -57,34 +57,39 @@ def main():
     try:
         while not rospy.is_shutdown():
             key = getKey()
+            move_cmd.linear.x = 0  # Default to stop
+            move_cmd.angular.z = 0  # Default to stop
+
             if key:
                 if key in ['w', '\x1b[A']:  # Up (W or Up Arrow)
                     move_cmd.linear.x = speed
-                    move_cmd.angular.z = 0
-                    key = 'Up   '
+                    key_display = 'Up   '
                 elif key in ['s', '\x1b[B']:  # Down (S or Down Arrow)
                     move_cmd.linear.x = -speed
-                    move_cmd.angular.z = 0
-                    key = 'Down '
+                    key_display = 'Down '
                 elif key in ['a', '\x1b[D']:  # Left (A or Left Arrow)
-                    move_cmd.linear.x = 0
                     move_cmd.angular.z = speed
-                    key = 'Left '
+                    key_display = 'Left '
                 elif key in ['d', '\x1b[C']:  # Right (D or Right Arrow)
-                    move_cmd.linear.x = 0
                     move_cmd.angular.z = -speed
-                    key = 'Right'
+                    key_display = 'Right'
                 elif key == '+':  # Increase speed
                     speed = min(max_speed, speed + 0.2)
                     print(f"Speed increased to {speed:.2f}")
+                    pub.publish(move_cmd)  # Publish stop command
                     continue
                 elif key == '-':  # Decrease speed
                     speed = max(0, speed - 0.2)
                     print(f"Speed decreased to {speed:.2f}")
+                    pub.publish(move_cmd)  # Publish stop command
                     continue
                 elif key == 'r':  # Reset speed
+                    move_cmd.linear.x = 0
+                    move_cmd.angular.z = 0
                     speed = 1.0
-                    print("Speed reset to 1.0")
+                    pub.publish(move_cmd)
+                    
+                    print("Robot resetted. !!!!")
                     continue
                 elif key in ['q', 'p']:  # Quit
                     print("")
@@ -92,17 +97,19 @@ def main():
                     print("Program Exiting...")
                     break
                 else:
-                    print("Unrecognized command. Bot Hold !")
-                    # Stop movement for unrecognized keys
-                    move_cmd.linear.x = 0
-                    move_cmd.angular.z = 0
+                    print("Unrecognized command. Bot stopped!")
+                    pub.publish(move_cmd)  # Publish stop command
                     continue
 
                 # Display movement and speed details for clarity
-                print(f"Key: {key} | Linear Velocity: {move_cmd.linear.x:.2f} | Angular Velocity: {move_cmd.angular.z:.2f}")
+                print(f"Key: {key_display} | Linear Velocity: {move_cmd.linear.x:.2f} | Angular Velocity: {move_cmd.angular.z:.2f}")
+            else:
+                # No key pressed, stop the robot
+                key_display = 'None '
+                # print(f"Key: {key_display} | Linear Velocity: {move_cmd.linear.x:.2f} | Angular Velocity: {move_cmd.angular.z:.2f}")
 
-                # Publish the movement command
-                pub.publish(move_cmd)
+            # Publish the movement command
+            pub.publish(move_cmd)
 
     except Exception as e:
         print(e)

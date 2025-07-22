@@ -22,8 +22,9 @@
       <wheelTorque>10</wheelTorque>
       <updateRate>50</updateRate>
       <max_velocity>0.5</max_velocity>
+      <rosDebugLevel>0</rosDebugLevel>
     </plugin>
-  </gazebo>
+  </gazebo> 
 
   <gazebo reference="laser_link">
     <sensor type="ray" name="rplidar">

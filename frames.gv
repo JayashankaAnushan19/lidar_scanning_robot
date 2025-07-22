@@ -1,0 +1,15 @@
+digraph G {
+"base_link" -> "lidar_base_cylinder"[label="Broadcaster: /base_to_lidar_base\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 190.585 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "caster_wheel"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 190.585 sec old)\nBuffer length: 0.000 sec\n"];
+"lidar_base_cylinder" -> "laser_link"[label="Broadcaster: /lidar_base_to_laser\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 190.585 sec old)\nBuffer length: 0.000 sec\n"];
+"map" -> "odom"[label="Broadcaster: /hector_mapping\nAverage rate: 2.988 Hz\nMost recent transform: 189.484 ( 1.101 sec old)\nBuffer length: 1.004 sec\n"];
+"map" -> "scanmatcher_frame"[label="Broadcaster: /hector_mapping\nAverage rate: 2.988 Hz\nMost recent transform: 189.484 ( 1.101 sec old)\nBuffer length: 1.004 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 190.585"[ shape=plaintext ] ;
+ }->"base_link";
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 190.585"[ shape=plaintext ] ;
+ }->"map";
+}

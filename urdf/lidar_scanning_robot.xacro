@@ -12,7 +12,7 @@
   <xacro:include filename="$(find lidar_scanning_robot)/urdf/gazebo.xacro" />
 
   <!-- Include Lidar -->
-  <!-- <xacro:include filename="$(find lidar_scanning_robot)/urdf/lidar.xacro" /> -->
+  <xacro:include filename="$(find lidar_scanning_robot)/urdf/lidar.xacro" />
 
   <!-- Base Link -->
   <link name="base_link">
@@ -41,7 +41,6 @@
 
   <xacro:wheel prefix="left" x="${-base_length/3}" y="1"/>
   <xacro:wheel prefix="right" x="${-base_length/3}" y="-1"/>
-
 
   <!-- <xacro:guide_wall prefix="left" side="1"/> -->
   <!-- <xacro:guide_wall prefix="right" side="-1"/> -->

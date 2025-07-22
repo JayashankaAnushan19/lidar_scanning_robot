@@ -1,0 +1,5 @@
+<launch>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find lidar_scanning_robot)/maps/my_map.yaml">
+        <param name="frame_id" value="map"/>
+    </node>
+</launch>
