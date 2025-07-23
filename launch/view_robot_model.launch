@@ -21,4 +21,8 @@
 
   <!-- Node to spawn the robot model in Gazebo -->
   <node name="spawn_robot" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model lidar_scanning_robot -x -2 -y 0.5 -z 0" />
+
+  <!-- First work place draft design included as a world -->
+  <node name="spawn_env" pkg="gazebo_ros" type="spawn_model" args="-file $(find lidar_scanning_robot)/worlds/first_work_place/urdf/Assem1.urdf -urdf -model my_first_work_place -x 0 -y 0 -z 0"/>
+
 </launch>

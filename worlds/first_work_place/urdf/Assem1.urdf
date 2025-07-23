@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Assem1">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.326956307826122 -0.159906420198384 0.126425962025181"
+        rpy="0 0 0" />
+      <mass
+        value="67711.7012342274" />
+      <inertia
+        ixx="1236706.03063841"
+        ixy="19.307181842411"
+        ixz="-221828.769744981"
+        iyy="1452110.92357208"
+        iyz="36.4817440714181"
+        izz="249463.319315194" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://lidar_scanning_robot/worlds/first_work_place/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://lidar_scanning_robot/worlds/first_work_place/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
