@@ -88,6 +88,14 @@
   <depend>tf2</depend>
   <depend>tf2_ros</depend>
 
+  <!-- Localization -->
+  <depend>hector_mapping</depend>
+  <depend>map_server</depend>
+
+  <!-- Path planning -->
+  <depend>move_base</depend>
+  <depend>navfn</depend>
+  <depend>dwa_local_planner</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

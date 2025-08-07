@@ -1,0 +1,28 @@
+# ROS dependencies for lidar_scanning_robot project
+
+ros-noetic-hector-mapping
+ros-noetic-tf
+ros-noetic-tf2
+ros-noetic-tf2-ros
+ros-noetic-robot-state-publisher
+ros-noetic-rviz
+ros-noetic-map-server
+ros-noetic-gazebo-ros
+ros-noetic-gazebo-ros-control
+ros-noetic-gazebo-plugins
+ros-noetic-geometry-msgs
+ros-noetic-sensor-msgs
+ros-noetic-nav-msgs
+ros-noetic-roscpp
+ros-noetic-rospy
+ros-noetic-std-msgs
+ros-noetic-urdf
+ros-noetic-xacro
+ros-noetic-joint-state-publisher
+ros-noetic-joint-state-publisher-gui
+ros-noetic-controller-manager
+ros-noetic-effort-controllers
+ros-noetic-joint-state-controller
+ros-noetic-diff-drive-controller
+
+# Run :->     pip install -r ~/ros/catkin_ws/src/lidar_scanning_robot/requirements.txt

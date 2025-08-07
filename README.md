@@ -8,6 +8,3 @@ The robot will support teleoperation via keyboard control, enabling manual navig
 <br><br><br><br><br>
 
 More details will be added as development progresses...
-
-
-check
