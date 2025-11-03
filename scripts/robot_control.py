@@ -2,124 +2,126 @@
 
 import rospy
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import LaserScan
 import sys, select, termios, tty
 
-# Save the existing terminal settings
 settings = termios.tcgetattr(sys.stdin)
 
-def getKey():
-    """Get keyboard input."""
-    tty.setraw(sys.stdin.fileno())  # Set terminal to raw mode
-    key = None
-    try:
-        # Take input every 0.1 seconds
-        if select.select([sys.stdin], [], [], 0.1)[0]:
-            key = sys.stdin.read(1)  # Read one character
-            if key == '\x1b':  # Check for arrow key sequence
-                key += sys.stdin.read(2)  # Read additional two characters for arrow keys
-    except Exception as e:
-        print(f"Error reading key: {e}")
-    finally:
-        # Restore terminal settings
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
-    return key
+class TeleopRobot:
+    def __init__(self):
+        self.pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
+        self.sub = rospy.Subscriber('/scan', LaserScan, self.scan_callback)
+        self.speed = 0.5
+        self.max_speed = 1.0
+        self.move_cmd = Twist()
+        self.min_distance = 0.01  # Stop if obstacle closer than 0.3m
+        self.obstacle_detected = False
 
-def main():
-    rospy.init_node('my_teleop_cmds')
-    pub = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-    
-    # Define initial speed and turn speed
-    speed = 1.0
-    max_speed = 6.0
-    move_cmd = Twist()
+    def scan_callback(self, data):
+        # Check front 60 degrees (30 degrees left and right)
+        front_ranges = data.ranges[len(data.ranges)//4:3*len(data.ranges)//4]
+        valid_ranges = [r for r in front_ranges if not (r == float('inf') or r == float('nan'))]
+        if valid_ranges and min(valid_ranges) < self.min_distance:
+            self.obstacle_detected = True
+        else:
+            self.obstacle_detected = False
 
-    print("")
-    print("--- Control Your Bot! ---")
-    print("Use 'WASD' or Arrow keys to move the bot")
-    print("Press 'Q' or 'P' to quit to main menu.")
-    print("Press 'R' to reset speed.")
-    print("Press '+' to increase speed, '-' to decrease speed.")
-    print("")
-    print("")
- 
-    # Shutdown hook to clean up
-    def shutdown_hook():
-        move_cmd.linear.x = 0
-        move_cmd.angular.z = 0
-        pub.publish(move_cmd)
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+    def getKey(self):
+        tty.setraw(sys.stdin.fileno())
+        key = None
+        try:
+            if select.select([sys.stdin], [], [], 0.1)[0]:
+                key = sys.stdin.read(1)
+                if key == '\x1b':
+                    key += sys.stdin.read(2)
+        except Exception as e:
+            print(f"Error reading key: {e}")
+        finally:
+            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+        return key
+
+    def run(self):
+        rospy.init_node('my_teleop_cmds')
         print("")
-        print(">>> Bot Shutting down !!!.")
+        print("--- Control Your Bot! ---")
+        print("Use 'WASD' or Arrow keys to move the bot")
+        print("Press 'Q' or 'P' to quit to main menu.")
+        print("Press 'R' to reset speed.")
+        print("Press '+' to increase speed, '-' to decrease speed.")
         print("")
 
-    rospy.on_shutdown(shutdown_hook)
+        def shutdown_hook():
+            self.move_cmd.linear.x = 0
+            self.move_cmd.angular.z = 0
+            self.pub.publish(self.move_cmd)
+            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+            print("")
+            print(">>> Bot Shutting down !!!.")
+            print("")
 
-    try:
-        while not rospy.is_shutdown():
-            key = getKey()
-            move_cmd.linear.x = 0  # Default to stop
-            move_cmd.angular.z = 0  # Default to stop
+        rospy.on_shutdown(shutdown_hook)
 
-            if key:
-                if key in ['w', '\x1b[A']:  # Up (W or Up Arrow)
-                    move_cmd.linear.x = speed
-                    key_display = 'Up   '
-                elif key in ['s', '\x1b[B']:  # Down (S or Down Arrow)
-                    move_cmd.linear.x = -speed
-                    key_display = 'Down '
-                elif key in ['a', '\x1b[D']:  # Left (A or Left Arrow)
-                    move_cmd.angular.z = speed
-                    key_display = 'Left '
-                elif key in ['d', '\x1b[C']:  # Right (D or Right Arrow)
-                    move_cmd.angular.z = -speed
-                    key_display = 'Right'
-                elif key == '+':  # Increase speed
-                    speed = min(max_speed, speed + 0.2)
-                    print(f"Speed increased to {speed:.2f}")
-                    pub.publish(move_cmd)  # Publish stop command
-                    continue
-                elif key == '-':  # Decrease speed
-                    speed = max(0, speed - 0.2)
-                    print(f"Speed decreased to {speed:.2f}")
-                    pub.publish(move_cmd)  # Publish stop command
-                    continue
-                elif key == 'r':  # Reset speed
-                    move_cmd.linear.x = 0
-                    move_cmd.angular.z = 0
-                    speed = 1.0
-                    pub.publish(move_cmd)
-                    
-                    print("Robot resetted. !!!!")
-                    continue
-                elif key in ['q', 'p']:  # Quit
-                    print("")
-                    print("Stop Command !!!.")
-                    print("Program Exiting...")
-                    break
+        try:
+            while not rospy.is_shutdown():
+                key = self.getKey()
+                self.move_cmd.linear.x = 0
+                self.move_cmd.angular.z = 0
+
+                if key:
+                    if key in ['w', '\x1b[A'] and not self.obstacle_detected:  # Up
+                        self.move_cmd.linear.x = self.speed
+                        key_display = 'Up   '
+                    elif key in ['s', '\x1b[B']:  # Down
+                        self.move_cmd.linear.x = -self.speed
+                        key_display = 'Down '
+                    elif key in ['a', '\x1b[D']:  # Left
+                        self.move_cmd.angular.z = self.speed
+                        key_display = 'Left '
+                    elif key in ['d', '\x1b[C']:  # Right
+                        self.move_cmd.angular.z = -self.speed
+                        key_display = 'Right'
+                    elif key == '+':  # Increase speed
+                        self.speed = min(self.max_speed, self.speed + 0.1)
+                        print(f"Speed increased to {self.speed:.2f}")
+                        self.pub.publish(self.move_cmd)
+                        continue
+                    elif key == '-':  # Decrease speed
+                        self.speed = max(0, self.speed - 0.1)
+                        print(f"Speed decreased to {self.speed:.2f}")
+                        self.pub.publish(self.move_cmd)
+                        continue
+                    elif key == 'r':  # Reset speed
+                        self.move_cmd.linear.x = 0
+                        self.move_cmd.angular.z = 0
+                        self.speed = 0.5
+                        self.pub.publish(self.move_cmd)
+                        print("Robot resetted. !!!!")
+                        continue
+                    elif key in ['q', 'p']:  # Quit
+                        print("")
+                        print("Stop Command !!!.")
+                        print("Program Exiting...")
+                        break
+                    else:
+                        print("Unrecognized command. Bot stopped!")
+                        self.pub.publish(self.move_cmd)
+                        continue
+
+                    print(f"Key: {key_display} | Linear Velocity: {self.move_cmd.linear.x:.2f} | Angular Velocity: {self.move_cmd.angular.z:.2f}")
                 else:
-                    print("Unrecognized command. Bot stopped!")
-                    pub.publish(move_cmd)  # Publish stop command
-                    continue
+                    key_display = 'None '
 
-                # Display movement and speed details for clarity
-                print(f"Key: {key_display} | Linear Velocity: {move_cmd.linear.x:.2f} | Angular Velocity: {move_cmd.angular.z:.2f}")
-            else:
-                # No key pressed, stop the robot
-                key_display = 'None '
-                # print(f"Key: {key_display} | Linear Velocity: {move_cmd.linear.x:.2f} | Angular Velocity: {move_cmd.angular.z:.2f}")
+                self.pub.publish(self.move_cmd)
 
-            # Publish the movement command
-            pub.publish(move_cmd)
+        except Exception as e:
+            print(e)
 
-    except Exception as e:
-        print(e)
-
-    finally:
-        # Stop the turtle when exiting
-        move_cmd.linear.x = 0
-        move_cmd.angular.z = 0
-        pub.publish(move_cmd)
-        termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
+        finally:
+            self.move_cmd.linear.x = 0
+            self.move_cmd.angular.z = 0
+            self.pub.publish(self.move_cmd)
+            termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
 
 if __name__ == '__main__':
-    main()
+    teleop = TeleopRobot()
+    teleop.run()

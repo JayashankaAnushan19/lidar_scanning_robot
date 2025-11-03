@@ -22,7 +22,15 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   tf2
   tf2_ros
-
+  sensor_msgs
+  nav_msgs
+  gazebo_ros_control
+  diff_drive_controller
+  hector_mapping
+  map_server
+  move_base
+  navfn
+  dwa_local_planner
 )
 
 ## System dependencies are found with CMake's conventions
@@ -135,7 +143,14 @@ catkin_package(
   tf
   tf2
   tf2_ros
-
+  sensor_msgs
+  nav_msgs
+  gazebo_ros_control
+  hector_mapping
+  map_server
+  move_base
+  navfn
+  dwa_local_planner
 )
 
 ###########
