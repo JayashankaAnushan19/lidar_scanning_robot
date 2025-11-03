@@ -1,18 +1,3 @@
-<?xml version="1.0"?>
-<launch>
-  <!-- Load robot description -->
-  <param name="robot_description" command="$(find xacro)/xacro '$(find lidar_scanning_robot)/urdf/lidar_scanning_robot.xacro'" />
-
-  <!-- Start robot state publisher -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
-
-
-  <!-- Start joint state publisher -->
-  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
-
-  <node pkg="tf" type="static_transform_publisher" name="map_to_base_link"
-    args="0 0 0 0 0 0 map base_link 50" />
-
-  <!-- Start RViz -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d '$(find lidar_scanning_robot)/config/options.rviz'"/>
-</launch>
+version https://git-lfs.github.com/spec/v1
+oid sha256:29224bc6254807bb0c3096968f5c079c2ae6a267cf89ec1a545ad41eb03e97c6
+size 739

@@ -1,10 +1,3 @@
-<launch>
-  <param name="robot_description" command="$(find xacro)/xacro $(find lidar_scanning_robot)/urdf/lidar_scanning_robot.xacro"/>
-
-  <node name="lidar_scanning_robot" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description -model lidar_scanning_robot" output="screen" />
-
-  <node name="controller_spawner" pkg="controller_manager" type="spawner"
-      args="diff_drive_controller" output="screen"/>
-
-
-</launch>
+version https://git-lfs.github.com/spec/v1
+oid sha256:9fadabe68a9b1a00542e089d033ffa887e6887d20f7ea727c130ad55fea21144
+size 434

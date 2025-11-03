@@ -1,16 +1,3 @@
-Visualization Manager:
-  Class: rviz::VisualizationManager
-  Displays:
-    - Class: rviz::LaserScan
-      Enabled: true
-      Name: LaserScan
-      Topic: /scan
-      Color: 255; 0; 0
-      Size (m): 0.1
-  Global Options:
-    Background Color: 48; 48; 48
-    Fixed Frame: laser
-  Tools:
-    - Class: rviz::Interact
-    - Class: rviz::MoveCamera
-    - Class: rviz::Select
+version https://git-lfs.github.com/spec/v1
+oid sha256:bf2cd9ec40210a966b660d405e8097eebe633ea2f5b899d3c9120d40d0a78ecb
+size 370

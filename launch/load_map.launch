@@ -1,5 +1,3 @@
-<launch>
-    <node name="map_server" pkg="map_server" type="map_server" args="$(find lidar_scanning_robot)/maps/my_map.yaml">
-        <param name="frame_id" value="map"/>
-    </node>
-</launch>
+version https://git-lfs.github.com/spec/v1
+oid sha256:5cf4e457d2b569a647760dcf1502942833327e3f876e2f9195cb0ea5fd3361bd
+size 192
